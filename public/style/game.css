@@ -14,7 +14,7 @@ table {
 }
 
 body {
-    background: url('Images/ciel.jpg'), center;
+    background: url('/Images/ciel.jpg'), center;
 }
 
 p {
@@ -37,7 +37,7 @@ p {
 
 @font-face {
     font-family: 'Dimbo';
-    src: url('Dimbo_Regular.ttf');
+    src: url('../fonts/Dimbo_Regular.ttf');
 }
 
 #p2 {
@@ -48,14 +48,12 @@ a:visited {
     color: dodgerblue;
 }
 
-#conteneur1
+#main
 {
     display: flex;
     justify-content: center;
 }
 
-#p3
-{
-    display: flex;
-    justify-content: space-around;
+#retour a {
+    background-image: url("/Images/retour.png");
 }
