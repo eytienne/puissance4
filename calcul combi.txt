@@ -1,0 +1,8 @@
+en ligne 4*6=24
+en colonne 3*7=21
+en diagonale 3*4*2=24
+en tout 24+24+21=69
+
+Par case:
+-a1: a1,b1,c1,d1 et a1,b2,c3,d4
+-a2

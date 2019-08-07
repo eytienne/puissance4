@@ -1,0 +1,61 @@
+td {
+    border-style: solid;
+    border-color: 1137EE;
+    border-width: 0;
+    height: 100%;
+    width: auto;
+    padding: 0;
+}
+
+table {
+    border-collapse: collapse;
+    margin: auto;
+    /* cette balise sert à centrer le tableau */
+}
+
+body {
+    background: url('Images/ciel.jpg'), center;
+}
+
+p {
+    color: dodgerblue;
+    font-family: 'Dimbo', Verdana, Georgia;
+}
+
+#bienvenue,
+#reglement,
+#credits,
+#p1,
+#p4 {
+    font-size: 300%;
+    text-align: center;
+}
+
+#jouer {
+    text-align: center;
+}
+
+@font-face {
+    font-family: 'Dimbo';
+    src: url('Dimbo_Regular.ttf');
+}
+
+#p2 {
+    font-size: 200%;
+}
+
+a:visited {
+    color: dodgerblue;
+}
+
+#conteneur1
+{
+    display: flex;
+    justify-content: center;
+}
+
+#p3
+{
+    display: flex;
+    justify-content: space-around;
+}
