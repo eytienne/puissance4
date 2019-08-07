@@ -36,7 +36,7 @@ module.exports = {
     // Path and filename of your result bundle.
     // Webpack will bundle all JavaScript into this file
     output: {
-        publicPath: 'public/',
+        publicPath: path.resolve(__dirname, 'public'),
         path: path.resolve(__dirname, 'public', 'build'),
         filename: function (data) {
             // console.log(data);
@@ -45,7 +45,7 @@ module.exports = {
     },
     module: {
         rules: [
-            {
+            { // babel
                 test: /\.js$/,
                 exclude: /(node_modules)/,
                 use: {
@@ -55,7 +55,7 @@ module.exports = {
                     }
                 }
             },
-            {
+            { // style
                 // Apply rule for .sass, .scss or .css files
                 test: /\.(sa|sc|c)ss$/,
 
@@ -87,7 +87,7 @@ module.exports = {
                     }
                 ]
             },
-            {
+            { // images
                 // Now we apply rule for images
                 test: /\.(png|jpe?g|gif|svg)$/,
                 use: [
@@ -103,7 +103,7 @@ module.exports = {
                     }
                 ]
             },
-            {
+            { // fonts
                 // Apply rule for fonts files
                 test: /\.(woff|woff2|ttf|otf|eot)$/,
                 use: [

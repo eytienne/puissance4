@@ -1,4 +1,4 @@
-import '../public/style/game.css'
+import '../public/style/game.scss'
 import $ from 'jquery'
 
 console.log($);
