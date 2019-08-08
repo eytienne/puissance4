@@ -5,9 +5,12 @@ body {
 
 	#backButton {
 		position: absolute;
-
-		&::after{
-			font-family: FontAwesome;
+		left: 0.5em;
+		top: 0.4em;
+		font-size: 3em;
+		
+		&::before {
+			font-family: "FontAwesome";
 			content: "\f053";
 		}
 	}

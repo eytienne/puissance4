@@ -1,14 +1,12 @@
+import 'font-awesome/css/font-awesome.css'
 import 'root/public/style/pages/game.scss'
 import $ from 'jquery'
 
 console.log($);
 
-const couleur = Math.random();
-if (couleur < 0.5) {
-	const nomPlayerUn = player1.name;
-	player1.name = player2.name;
-	player2.name = nomPlayerUn;
-}
+let couleurs = ['red', 'yellow']
+if (Math.random() < 0.5)
+	couleurs = [couleurs[1], couleurs[0]]
 
 const game = {
 	nbCoups: 0,
@@ -19,6 +17,15 @@ const game = {
 };
 
 const tableauDeJeu = [];
+
+$(function () {
+	for (let i = 0; i < game.board.height; i++) {
+		const line = $("<tr></tr>").appendTo("table#gameTable > tbody");
+		for (let j = 0; j < game.board.width; j++) {
+			$("<td></td>").appendTo(line).append(`<div class="inner"></div>`);
+		}
+	}
+})
 
 function caseHandler(evt) {
 	const winningMove = coup(evt.target.parentNode.getAttribute("col"), evt.target.parentNode.getAttribute("lig"));

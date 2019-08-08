@@ -1,16 +1,69 @@
 @import "../base";
 
-td {
-	border-style: solid;
-	border-color: 1137ee;
-	border-width: 0;
-	height: 100%;
-	width: auto;
-	padding: 0;
+#backButton {
+	padding-left: 0.5em;
+	padding-top: 0.4em;
+	font-size: 3em;
+	display: inline-block;
+
+	&::before {
+		font-family: "FontAwesome";
+		content: "\f053";
+	}
 }
 
-table {
+table#gameTable {
 	border-collapse: collapse;
-	margin: auto;
-	/* cette balise sert à centrer le tableau */
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: 80%;
+	padding-top: 40%;
+	border: 1px solid red;
+	display: block;
+	position: relative;
+	z-index: 1;
+
+	> tbody {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		flex-wrap: wrap;
+		position: absolute;
+		top: 0;
+		left: 0;
+
+		#token {
+			width: 14%;
+			height: 17%;
+			background-color: red;
+			position: absolute;
+			top: 82%;
+			z-index: 0;
+			border-radius: 50%;
+		}
+
+		> tr {
+			flex: 1 0 100%;
+			display: flex;
+			overflow: hidden;
+
+			> td {
+				flex: 1;
+				height: 100%;
+				width: 100%;
+				display: flex;
+				align-items: center;
+				overflow: hidden;
+
+				> .inner {
+					background-color: transparent;
+					box-shadow: 0 0 0 1000em #2879ca;
+					border-radius: 50%;
+					height: 80%;
+					width: 80%;
+					margin: 0 10%;
+				}
+			}
+		}
+	}
 }

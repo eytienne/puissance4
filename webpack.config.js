@@ -26,7 +26,7 @@ module.exports = {
 	// Path and filename of your result bundle.
 	// Webpack will bundle all JavaScript into this file
 	output: {
-		publicPath: 'public/',
+		publicPath: '/public/',
 		path: path.resolve(__dirname, 'public', 'build'),
 		filename: function (data) {
 			const ret = data.chunk.name.split('./src/').pop();
@@ -97,6 +97,9 @@ module.exports = {
 					{
 						// Using file-loader too
 						loader: "file-loader",
+						options: {
+							publicPath: "/public/build/"
+						}
 					}
 				]
 			}
