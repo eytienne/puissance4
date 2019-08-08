@@ -1,3 +1,3 @@
-import '../public/style/home.scss'
+import 'root/public/style/pages/home.scss'
 
 console.log("OK")

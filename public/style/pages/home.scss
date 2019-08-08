@@ -1,0 +1,28 @@
+@import "../base";
+
+body {
+	text-align: center;
+
+	p {
+		font-size: 2em;
+		line-height: 3em;
+
+		&#welcome {
+			font-size: 3em;
+		}
+
+		&#playButton a {
+			display: block;
+			padding-top: 30%;
+			padding-left: 30%;
+			width: fit-content;
+			background-image: url("/public/images/playButton.png");
+			background-repeat: no-repeat;
+			background-position: center center;
+			background-size: contain;
+			margin-left: auto;
+			margin-right: auto;
+			border-radius: 50%;
+		}
+	}
+}

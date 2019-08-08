@@ -1,0 +1,16 @@
+@import "../base";
+
+td {
+	border-style: solid;
+	border-color: 1137ee;
+	border-width: 0;
+	height: 100%;
+	width: auto;
+	padding: 0;
+}
+
+table {
+	border-collapse: collapse;
+	margin: auto;
+	/* cette balise sert à centrer le tableau */
+}

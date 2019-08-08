@@ -1,0 +1,24 @@
+@import "../base";
+
+body {
+	text-align: center;
+
+	#backButton {
+		position: absolute;
+
+		&::after{
+			font-family: FontAwesome;
+			content: "\f053";
+		}
+	}
+
+	p {
+		font-size: 2em;
+		line-height: 3em;
+
+		&:first-child,
+		&#playButton {
+			font-size: 5em;
+		}
+	}
+}
