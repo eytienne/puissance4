@@ -56,6 +56,17 @@ table#gameTable {
 					width: 80%;
 					margin: 0 10%;
 					outline: none;
+
+					&.blink {
+						animation: blink 1s 4;
+					}
+
+					@keyframes blink {
+						90%,
+						100% {
+							background-color: unset;
+						}
+					}
 				}
 				&.occupied {
 					&[data-color="red"] {

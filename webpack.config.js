@@ -10,16 +10,11 @@ module.exports = {
 
 	// Path to your entry point. From this file Webpack will begin his work
 	entry: function () {
-		console.log('beg js');
-
 		const ret = {};
-		glob.sync("./src/**/*.js").reduce(function (buf, path) {
+		glob.sync("./src/**/*.[tj]s").reduce(function (buf, path) {
 			buf[path] = path;
 			return buf;
 		}, ret);
-
-		console.log('end js');
-
 		return ret;
 	},
 
@@ -29,7 +24,7 @@ module.exports = {
 		publicPath: '/public/',
 		path: path.resolve(__dirname, 'public', 'build'),
 		filename: function (data) {
-			const ret = data.chunk.name.split('./src/').pop();
+			const ret = data.chunk.name.split('./src/').pop().replace('.ts', '.js');
 			console.log('id:', ret)
 			return ret;
 		}
@@ -42,6 +37,15 @@ module.exports = {
 				use: {
 					loader: 'babel-loader',
 				}
+			},
+			{
+				test: /\.ts$/,
+				exclude: /node_modules/,
+				use: [
+					{
+						loader: 'ts-loader',
+					}
+				]
 			},
 			{ // style
 				// Apply rule for .sass, .scss or .css files
