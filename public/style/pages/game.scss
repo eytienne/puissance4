@@ -58,11 +58,13 @@ table#gameTable {
 					outline: none;
 				}
 				&.occupied {
-					> .inner {
-						&.red {
+					&[data-color="red"] {
+						> .inner {
 							background-color: $red;
 						}
-						&.yellow {
+					}
+					&[data-color="yellow"] {
+						> .inner {
 							background-color: $yellow;
 						}
 					}
