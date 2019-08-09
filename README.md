@@ -1,3 +1,3 @@
 # puissance4
 
-run server yarn script with sudo 
+use 'sudo yarn run server' to test because of admin rights for port access 
