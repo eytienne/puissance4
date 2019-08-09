@@ -44,16 +44,21 @@ class GameBoard {
 		const moveHandler = (e) => {
 			const target = $(e.currentTarget);
 			++this.nbCoups;
-			target.addClass('occupied').attr('data-color', (this.nbCoups % 2 === 1 ? this.colors[0] : this.colors[1]))
 			const position = {
 				x: target.parent().children().index(target),
 				y: target.parent().parent().children().index(target.parent())
 			}
+			while (position.y + 1 < this.dimensions.height && this.matrix[position.y + 1][position.x].is(':not(.occupied)'))
+				++position.y
+
+			this.matrix[position.y][position.x].addClass('occupied').attr('data-color', (this.nbCoups % 2 === 1 ? this.colors[0] : this.colors[1]))
 			const move = this.cellInfos(position);
 			if (Object.values(move).reduce((max, e) => e > max ? e : max, 1) >= 4) {
 				tbody.off('click', 'td', moveHandler);
-				alert(`Le joueur ${(this.nbCoups % 2 === 1 ? this.colors[0] : this.colors[1]) === 'red' ? 'rouge' : 'jaune'} a gagné`);
-				new GameBoard(tbody.get(0));
+				setTimeout(function () {	
+					alert(`Le joueur ${(this.nbCoups % 2 === 1 ? this.colors[0] : this.colors[1]) === 'red' ? 'rouge' : 'jaune'} a gagné`);
+					new GameBoard(tbody.get(0));
+				}.bind(this), 0);
 			}
 		}
 
