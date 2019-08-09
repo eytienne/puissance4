@@ -2,30 +2,52 @@ import 'font-awesome/css/font-awesome.css'
 import 'root/public/style/pages/game.scss'
 import $ from 'jquery'
 
-console.log($);
-
-let couleurs = ['red', 'yellow']
-if (Math.random() < 0.5)
-	couleurs = [couleurs[1], couleurs[0]]
-
-const game = {
-	nbCoups: 0,
-	board: {
-		height: 6,
-		width: 7,
-	},
-};
-
 const tableauDeJeu = [];
 
 $(function () {
-	for (let i = 0; i < game.board.height; i++) {
-		const line = $("<tr></tr>").appendTo("table#gameTable > tbody");
-		for (let j = 0; j < game.board.width; j++) {
-			$("<td></td>").appendTo(line).append(`<div class="inner"></div>`);
-		}
+	var gb = new GameBoard('table#gameTable > tbody:not(#token)');
+	gb.reset();
+});
+
+class GameBoard {
+
+	nbCoups = 0
+	dimensions = {
+		height: 6,
+		width: 7,
 	}
-})
+
+	constructor(selector) {
+		this.couleurs = ['red', 'yellow'];
+		if (Math.random() < 0.5)
+			this.couleurs = ['yellow', 'red']
+
+		this.this = $(selector);
+		this.this.on('click', '.inner:not(.occupied)', (e) => {
+			const target = $(e.target).parent();
+			++this.nbCoups;
+			target.addClass(`occupied ${this.nbCoups % 2 == 1 ? this.couleurs[0] : this.couleurs[1]}`)
+			console.log(target.parent().parent().children().index(target.parent()))
+		});
+	}
+
+	reset() {
+		const tbody = this.this;
+		tbody.empty();
+		for (let i = 0; i < this.dimensions.height; i++) {
+			const line = $("<tr></tr>").appendTo(tbody);
+			for (let j = 0; j < this.dimensions.width; j++) {
+				$("<td></td>").appendTo(line).append(`<button class="inner"></button>`);
+			}
+		}
+		const model = $(tbody.children("tr > td")[0]);
+		tbody.parent().children("tbody#token").css({
+			height: model.height(),
+			width: model.width()
+		});
+	}
+
+}
 
 function caseHandler(evt) {
 	const winningMove = coup(evt.target.parentNode.getAttribute("col"), evt.target.parentNode.getAttribute("lig"));

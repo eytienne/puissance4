@@ -41,9 +41,6 @@ module.exports = {
 				exclude: /(node_modules)/,
 				use: {
 					loader: 'babel-loader',
-					options: {
-						presets: ['@babel/preset-env']
-					}
 				}
 			},
 			{ // style
@@ -117,4 +114,6 @@ module.exports = {
 	// minifying and other thing so let's set mode to development
 
 	// mode: 'development',
+
+	devtool: 'source-map'
 };

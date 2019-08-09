@@ -1,33 +1,5 @@
-(Ebauche de protocole :
--Lancer la partie avec un tableau de jetons vides
--Cliquer sur une colonne pour que le jeton apparaisse et tombe progressivement jusqu'en bas
--Continuer ainsi pour que chaque jeton tombe progressivment sans remplacer le précédent
--Détecter un alignement de 4 jetons vertical, horizontal ou diagonal
--Signaler quel joueur gagne la partie
--Vider la grille et proposer nouvelle partie)
-
-Le jaune commence toujours donc quand le joueur jaune clique en premier sur une colonne k avec k allant de a à b, alors le jeton vide sur la ligne 1 devient jaune.
-
-Ensuite, le tour passe au joueur rouge donc quand il clique en second sur une colonne k alors le jeton vide de la ligne la plus basse (ici 1 ou 2) devient rouge.
-
-Mécanisme de jeu général : 
-Si le joueur de couleur p clique sur la colonne k
-    Alors si l'image de la ligne 1 n'est pas modifiée ou est vide
-                                 2
-                                 3
-                                 4
-                                 5
-                                 6
-                alors la remplacer par l'image du jeton de la couleur en présence (ici rouge)
-                      et incrémenter le compteur de tour
-Sinon afficher éventuellement que la colonne ne peut pas être jouée
-
-Et ainsi de suite, les tours impairs sont joués par le joueur jaune et les tours pairs par le rouge sur le même modèle qu'au second coup.
-
-Si une colonne ne contient plus de jeton vide alors elle n'est plus cliquable ou jouable.
-
-Après chaque coup à partir du 7eme, on vérifie la présence possible d'un alignement de alignement de quatre jetons d'une même couleur.
-
-Quand tous les images/cases de la ligne 6 ne sont plus vides 
-    alors terminer la partie
-
+Quand on clique sur une case :
+    -si elle est occupée:
+        rien;
+    -sinon:
+        l'occuper de la couleur courante et incrémenter le nombre de coups;
