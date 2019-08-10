@@ -8,6 +8,7 @@ import * as _ from 'lodash'
 $(function () {
 	new GameBoard('table#gameTable > tbody:not(#token)');
 	$('#againButton').click(function () {
+		$('table#gameTable > tbody:not(#token)').off('click', 'td:not(.occupied)');
 		new GameBoard('table#gameTable > tbody:not(#token)');
 	})
 });
