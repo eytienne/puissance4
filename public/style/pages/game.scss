@@ -58,7 +58,7 @@ table#gameTable {
 					outline: none;
 
 					&.blink {
-						animation: blink 1s 4;
+						animation: blink .5s 4;
 					}
 
 					@keyframes blink {

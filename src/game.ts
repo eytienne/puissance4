@@ -56,19 +56,52 @@ class GameBoard {
 				++position.y
 
 			this.matrix[position.y][position.x].addClass('occupied').attr('data-color', (this.nbCoups % 2 === 1 ? this.colors[0] : this.colors[1]))
-			const move = this.cellInfos(position);
-			const max = move.reduce((max, e) => {
-				const len = (e.direction === 'vertical' ? e.segment.end.y - e.segment.beg.y + 1 : e.segment.end.x - e.segment.beg.x + 1);
-				return len > max ? len : max;
-			}, 1);
-			console.log(max);
-			if (max >= this.alignedToWin) {
-				tbody.off('click', 'td', moveHandler);
 
+			const move = this.cellInfos(position);
+
+			const best: [number, { direction: string, segment: ISegment }] = move.reduce((buf, e) => {
+				const len = (e.direction === 'vertical' ? e.segment.end.y - e.segment.beg.y + 1 : e.segment.end.x - e.segment.beg.x + 1);
+				return len > buf[0] ? [len, e] : buf;
+			}, [1, null]);
+			console.log(best);
+
+			if (best[0] >= this.alignedToWin) {
+				tbody.off('click', 'td', moveHandler);
+				let toBlink: JQuery<HTMLTableCellElement>[] = [];
+				switch ((best[1] as { direction: string }).direction) {
+					case 'horizontal':
+						toBlink = this.matrix[position.y].slice(best[1].segment.beg.x, best[1].segment.end.x + 1)
+						break;
+					case 'vertical':
+						this.matrix.slice(best[1].segment.beg.y, best[1].segment.end.y + 1).map(line => line[position.x])
+						break;
+					case 'descendant':
+						for (let y = best[1].segment.beg.y, x = best[1].segment.beg.x;
+							y <= best[1].segment.end.y && x <= best[1].segment.end.x;
+							++y, ++x) {
+							toBlink.push(this.matrix[y][x]);
+						}
+						break;
+					case 'ascendant':
+						for (let y = best[1].segment.beg.y, x = best[1].segment.beg.x;
+							y >= best[1].segment.end.y && x <= best[1].segment.end.x;
+							--y, ++x) {
+							toBlink.push(this.matrix[y][x])
+						}
+						break;
+					default:
+						throw new Error("Invalid direction !");
+				}
+				toBlink.forEach(function (e: JQuery<HTMLTableCellElement>) {
+					e.children(".inner").addClass('blink');
+					setTimeout(function () {
+						e.children(".inner").removeClass('blink')
+					}, 2000);
+				});
 				setTimeout(function () {
 					alert(`Le joueur ${(this.nbCoups % 2 === 1 ? this.colors[0] : this.colors[1]) === 'red' ? 'rouge' : 'jaune'} a gagné`);
 					// new GameBoard(tbody.get(0));
-				}.bind(this), 0);
+				}.bind(this), 2000);
 			}
 		}
 
@@ -96,7 +129,6 @@ class GameBoard {
 				end: { y: y, x: xu },
 			}
 		});
-		// this.matrix[y].slice(xl, xu + 1);
 
 		/* vertical check */
 		let yl = y, yu = y;
@@ -111,7 +143,6 @@ class GameBoard {
 				end: { y: yu, x: x },
 			}
 		});
-		// this.matrix.slice(yl, yu + 1).map(line => line[x])
 
 		/* descendant diagonal check */
 		let lc = { x: x, y: y },
@@ -127,9 +158,6 @@ class GameBoard {
 				end: uc
 			}
 		});
-		// for (let y = lc.y, x = lc.x; y <= uc.y && x <= uc.x; ++y, ++x) {
-		// 	infos.descendant.push(this.matrix[y][x])
-		// }
 
 		/* ascendant diagonal check */
 		lc = { x: x, y: y };
@@ -145,9 +173,6 @@ class GameBoard {
 				end: uc
 			}
 		});
-		// for (let y = lc.y, x = lc.x; y >= uc.y && x <= uc.x; --y, ++x) {
-		// 	infos.descendant.push(this.matrix[y][x])
-		// }
 
 		console.log({ x: x, y: y })
 		console.log(currentColor)
