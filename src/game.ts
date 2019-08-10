@@ -1,11 +1,15 @@
 import 'font-awesome/css/font-awesome.css'
 import 'root/public/style/pages/game.scss'
 import * as $ from 'jquery'
+import * as _ from 'lodash'
 
 (window as any).$ = $;
 
 $(function () {
-	var gb = new GameBoard('table#gameTable > tbody:not(#token)');
+	new GameBoard('table#gameTable > tbody:not(#token)');
+	$('#againButton').click(function () {
+		new GameBoard('table#gameTable > tbody:not(#token)');
+	})
 });
 
 interface Coords {
@@ -25,11 +29,11 @@ class GameBoard {
 	};
 	readonly alignedToWin = 4;
 	private colors = Math.random() < 0.5 ? ['red', 'yellow'] : ['yellow', 'red'];
-	private tbody: JQuery<HTMLElement>;
 	private matrix: JQuery<HTMLTableCellElement>[][] = [];
+	private paused: boolean = false;
 
 	constructor(selector: string) {
-		const tbody = this.tbody = $(selector);
+		const tbody = $(selector);
 		tbody.empty();
 		for (let j = 0; j < this.dimensions.height; j++) {
 			const line = $('<tr></tr>').appendTo(tbody);
@@ -39,23 +43,66 @@ class GameBoard {
 				this.matrix[j][i] = cell;
 			}
 		}
-		const model = $(tbody.children('tr > td')[0]);
-		tbody.parent().children('tbody#token').css({
+
+		const model = $(tbody.find('tr > td')[0])
+		const tokenBody = tbody.parent().children('tbody#token')
+		tokenBody.css({
 			height: model.height(),
 			width: model.width()
-		});
+		})
+		$(window).resize(function () {
+			tokenBody.css({
+				height: model.height(),
+				width: model.width()
+			})
+		})
 
-		const moveHandler: JQuery.EventHandlerBase<any, JQuery.ClickEvent> = (e) => {
+		const moveHandler: JQuery.EventHandlerBase<any, JQuery.ClickEvent> = async (e) => {
+			console.log('step 0')
+			if (this.paused)
+				return
+			this.paused = true;
 			const target = $(e.currentTarget) as JQuery<HTMLElement>;
 			++this.nbCoups;
+			console.log('step 1')
+			const currentColor = this.nbCoups % 2 === 1 ? this.colors[0] : this.colors[1];
 			const position: Coords = {
 				x: target.parent().children().index(target),
 				y: target.parent().parent().children().index(target.parent())
 			}
+			console.log('step 2')
 			while (position.y + 1 < this.dimensions.height && this.matrix[position.y + 1][position.x].is(':not(.occupied)'))
 				++position.y
 
-			this.matrix[position.y][position.x].addClass('occupied').attr('data-color', (this.nbCoups % 2 === 1 ? this.colors[0] : this.colors[1]))
+			const realTarget = this.matrix[position.y][position.x];
+			console.log(await new Promise(function (resolve, reject) {
+				console.log('step 3 : beg fall')
+				tokenBody.css({
+					display: 'block',
+					left: realTarget[0].offsetLeft,
+					top: 0,
+				}).find('.inner').css('background-color', currentColor);
+
+				console.log('step 3.1')
+				const tf = _.throttle((...args) => console.log(...args), 1000);
+
+				setTimeout(function fallAnimation() {
+					// debugger
+					console.log('step 3.2')
+					const newTop = tokenBody[0].offsetTop + 10;
+					tf('/!\\', newTop, tokenBody[0], realTarget[0])
+					tokenBody.css('top', newTop);
+					if (tokenBody[0].offsetTop >= realTarget[0].offsetTop) {
+						console.log('step 3.3')
+						tokenBody.css('display', 'none').find('.inner').css('background-color', 'transparent');
+						resolve('step 4 : fall finished');
+					} else {
+						setTimeout(fallAnimation, 10 * (1 - Math.pow(tokenBody[0].offsetTop / tbody.height(), 2)));
+					}
+				}, 10);
+			}));
+
+			realTarget.addClass('occupied').attr('data-color', currentColor)
 
 			const move = this.cellInfos(position);
 
@@ -65,15 +112,18 @@ class GameBoard {
 			}, [1, null]);
 			console.log(best);
 
+			console.log('step 5')
 			if (best[0] >= this.alignedToWin) {
-				tbody.off('click', 'td', moveHandler);
+				tbody.off('click', 'td:not(.occupied)', moveHandler);
+
+				/* win animation */
 				let toBlink: JQuery<HTMLTableCellElement>[] = [];
 				switch ((best[1] as { direction: string }).direction) {
 					case 'horizontal':
 						toBlink = this.matrix[position.y].slice(best[1].segment.beg.x, best[1].segment.end.x + 1)
 						break;
 					case 'vertical':
-						this.matrix.slice(best[1].segment.beg.y, best[1].segment.end.y + 1).map(line => line[position.x])
+						toBlink = this.matrix.slice(best[1].segment.beg.y, best[1].segment.end.y + 1).map(line => line[position.x])
 						break;
 					case 'descendant':
 						for (let y = best[1].segment.beg.y, x = best[1].segment.beg.x;
@@ -92,24 +142,26 @@ class GameBoard {
 					default:
 						throw new Error("Invalid direction !");
 				}
+				console.log(toBlink)
 				toBlink.forEach(function (e: JQuery<HTMLTableCellElement>) {
 					e.children(".inner").addClass('blink');
 					setTimeout(function () {
 						e.children(".inner").removeClass('blink')
 					}, 2000);
 				});
+
 				setTimeout(function () {
-					alert(`Le joueur ${(this.nbCoups % 2 === 1 ? this.colors[0] : this.colors[1]) === 'red' ? 'rouge' : 'jaune'} a gagné`);
-					// new GameBoard(tbody.get(0));
+					alert(`Le joueur ${currentColor === 'red' ? 'rouge' : 'jaune'} a gagné`);
 				}.bind(this), 2000);
 			}
+			console.log('step 6')
+			this.paused = false;
 		}
 
 		tbody.on('click', 'td:not(.occupied)', moveHandler);
 	}
 
 	private cellInfos({ x, y }: { x: number, y: number }) {
-		const tbody = this.tbody;
 		const currentColor = this.matrix[y][x].attr('data-color')
 		const infos: { direction: string, segment: ISegment }[] = [];
 
@@ -174,9 +226,6 @@ class GameBoard {
 			}
 		});
 
-		console.log({ x: x, y: y })
-		console.log(currentColor)
-		console.log(infos);
 		return infos;
 	}
 }

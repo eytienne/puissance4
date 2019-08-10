@@ -4,15 +4,26 @@ $blue: #2879ca;
 $red: #f00;
 $yellow: #ff0;
 
-#backButton {
+a,
+button {
 	padding-left: 0.5em;
 	padding-top: 0.4em;
 	font-size: 3em;
 	display: inline-block;
 
-	&::before {
+	&#backButton::before {
 		font-family: "FontAwesome";
 		content: "\f053";
+	}
+	&#againButton {
+		background: unset;
+		border: none;
+		outline: none;
+		
+		&::before {
+			font-family: "FontAwesome";
+			content: "\f01e";
+		}
 	}
 }
 
@@ -58,7 +69,7 @@ table#gameTable {
 					outline: none;
 
 					&.blink {
-						animation: blink .5s 4;
+						animation: blink 0.5s 4;
 					}
 
 					@keyframes blink {

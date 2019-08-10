@@ -8,13 +8,15 @@
   "dependencies": {
     "fast-json-stringify": "^1.15.4",
     "font-awesome": "^4.7.0",
-    "jquery": "^3.4.1"
+    "jquery": "^3.4.1",
+    "lodash": "^4.17.15"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "@types/jquery": "^3.3.31",
+    "@types/lodash": "^4.14.136",
     "autoprefixer": "^9.6.1",
     "babel-loader": "^8.0.6",
     "css-loader": "^3.2.0",
