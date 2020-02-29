@@ -1,3 +1,4 @@
 # puissance4
-
-use 'sudo yarn run server' to test because of admin rights for port access 
+### To play :
+`yarn run rebuild`
+`sudo yarn run server`(sudo because of admin rights for port access)
